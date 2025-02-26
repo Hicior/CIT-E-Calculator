@@ -10,11 +10,7 @@
         profitToDistributeInput: document.getElementById("profitToDistribute"),
         estonianCITOutput: document.getElementById("estonianCIT"),
         linearTaxOutput: document.getElementById("linearTax"),
-        llcTaxOutput: document.getElementById("llcTax"),
-        copySidebar: document.querySelector('.copy-sidebar'),
-        sidebarToggle: document.querySelector('.copy-sidebar-toggle'),
-        copyButton: document.getElementById('copyValues'),
-        copySuccess: document.getElementById('copySuccess')
+        llcTaxOutput: document.getElementById("llcTax")
     };
 
     /* ==================================================
@@ -195,38 +191,6 @@
     }
 
     /* ==================================================
-       Copy Values Function
-    ================================================== */
-    function getFormattedValues() {
-        const grossRevenue = parsePLN(DOM.grossRevenueInput.value);
-        const income = parsePLN(DOM.incomeInput.value);
-        const profitToDistribute = parsePLN(DOM.profitToDistributeInput.value);
-        const estonianCIT = DOM.estonianCITOutput.value;
-        const linearTax = DOM.linearTaxOutput.value;
-        const llcTax = DOM.llcTaxOutput.value;
-        
-        // Format date according to custom instructions (DD-MM-YYYY HH:MM)
-        const now = new Date();
-        const day = String(now.getDate()).padStart(2, '0');
-        const month = String(now.getMonth() + 1).padStart(2, '0');
-        const year = now.getFullYear();
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const formattedDate = `${day}-${month}-${year} ${hours}:${minutes}`;
-
-        return `Kalkulator Porównawczy Podatków (${formattedDate})\n` +
-               `---------------------------\n` +
-               `Przychód brutto: ${formatPLN(grossRevenue)}\n` +
-               `Dochód: ${formatPLN(income)}\n` +
-               `Zysk do wypłacenia: ${formatPLN(profitToDistribute)}\n\n` +
-               `Wyniki:\n` +
-               `---------------------------\n` +
-               `CIT Estoński: ${estonianCIT}\n` +
-               `JDG - Podatek liniowy: ${linearTax}\n` +
-               `Sp. z o.o.: ${llcTax}`;
-    }
-
-    /* ==================================================
        Event Listeners
     ================================================== */
     DOM.calculateButton.addEventListener("click", calculate);
@@ -269,33 +233,6 @@
         validateInput(this.value, "profitToDistribute");
         if (DOM.resultsSection.classList.contains("visible")) {
             calculate();
-        }
-    });
-
-    // Copy sidebar functionality
-    DOM.sidebarToggle.addEventListener('click', () => {
-        // Toggle the open class
-        DOM.copySidebar.classList.toggle('open');
-        
-        // Update the toggle button position and visibility
-        if (DOM.copySidebar.classList.contains('open')) {
-            // When sidebar is open, ensure toggle button is positioned correctly
-            DOM.sidebarToggle.style.right = '-40px';
-        } else {
-            // When sidebar is closed, reset the toggle button position
-            DOM.sidebarToggle.style.right = '0';
-        }
-    });
-
-    DOM.copyButton.addEventListener('click', async () => {
-        try {
-            await navigator.clipboard.writeText(getFormattedValues());
-            DOM.copySuccess.classList.add('show');
-            setTimeout(() => {
-                DOM.copySuccess.classList.remove('show');
-            }, 2000);
-        } catch (err) {
-            console.error('Failed to copy text: ', err);
         }
     });
 })();
