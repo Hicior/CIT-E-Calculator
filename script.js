@@ -183,11 +183,6 @@
         
         // Hide the calculate button after clicking
         DOM.calculateButton.style.display = "none";
-        
-        // Scroll to results with smooth animation
-        setTimeout(() => {
-            DOM.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 100);
     }
 
     /* ==================================================

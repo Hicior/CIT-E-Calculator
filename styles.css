@@ -10,8 +10,6 @@
 }
 
 .eCIT-Calculator-Wrapper {
-  min-height: 100vh;
-  padding: 40px 20px;
   background: #ffffff;
   font-family: "Instrument Sans", sans-serif;
   color: #181818;
@@ -46,7 +44,7 @@
   left: 50%;
   transform: translateX(-50%);
   width: 80px;
-  height: 3px;
+  height: 4px;
   background: #181818;
 }
 
@@ -112,8 +110,8 @@
 
 .eCIT-Calculator-Wrapper .eCIT-input-group label {
   font-size: 16px;
-  font-weight: 500;
-  color: #0d2d46;
+  font-weight: 600;
+  color: #242424;
   margin-bottom: 4px;
 }
 
@@ -126,13 +124,13 @@
   background: #ffffff;
   text-align: right;
   font-family: "Instrument Sans", sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   width: 100%;
 }
 
 .eCIT-Calculator-Wrapper .eCIT-input-group input:focus {
   outline: none;
-  border-bottom-color: #0d2d46;
+  border-bottom-color: #181818;
 }
 
 .eCIT-Calculator-Wrapper .eCIT-input-group input.error {
@@ -223,7 +221,7 @@
 
 .eCIT-Calculator-Wrapper .eCIT-result-item label {
   font-weight: 500;
-  color: #0d2d46;
+  color: #242424;
   margin-right: 10px;
   flex: 0 0 auto;
 }
@@ -236,7 +234,7 @@
   font-size: 18px;
   width: auto;
   padding: 8px 12px;
-  color: #0d2d46;
+  color: #242424;
   flex: 1;
   min-width: 120px;
 }
