@@ -185,6 +185,9 @@
             DOM.resultsSection.classList.add("visible");
         }, 50);
         
+        // Hide the calculate button after clicking
+        DOM.calculateButton.style.display = "none";
+        
         // Scroll to results with smooth animation
         setTimeout(() => {
             DOM.resultsSection.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -247,6 +250,28 @@
         }
     });
 
+    // Auto-update calculations when inputs change
+    DOM.grossRevenueInput.addEventListener("input", function() {
+        validateInput(this.value, "grossRevenue");
+        if (DOM.resultsSection.classList.contains("visible")) {
+            calculate();
+        }
+    });
+
+    DOM.incomeInput.addEventListener("input", function() {
+        validateInput(this.value, "income");
+        if (DOM.resultsSection.classList.contains("visible")) {
+            calculate();
+        }
+    });
+
+    DOM.profitToDistributeInput.addEventListener("input", function() {
+        validateInput(this.value, "profitToDistribute");
+        if (DOM.resultsSection.classList.contains("visible")) {
+            calculate();
+        }
+    });
+
     // Copy sidebar functionality
     DOM.sidebarToggle.addEventListener('click', () => {
         // Toggle the open class
@@ -272,18 +297,5 @@
         } catch (err) {
             console.error('Failed to copy text: ', err);
         }
-    });
-
-    // Input validation on change
-    DOM.grossRevenueInput.addEventListener("input", () => {
-        validateInput(DOM.grossRevenueInput.value, "grossRevenue");
-    });
-
-    DOM.incomeInput.addEventListener("input", () => {
-        validateInput(DOM.incomeInput.value, "income");
-    });
-
-    DOM.profitToDistributeInput.addEventListener("input", () => {
-        validateInput(DOM.profitToDistributeInput.value, "profitToDistribute");
     });
 })();
