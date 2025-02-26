@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Porównawczy Podatków</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">    
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="Tax-Calculator-Wrapper">
+        <section class="calculator">
+            <div class="calculator-container">
+                <div class="copy-sidebar">
+                    <div class="copy-sidebar-toggle">
+                        <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 18l6-6-6-6"/>
+                        </svg>
+                    </div>
+                    <div class="copy-sidebar-content">
+                        <h3>Kopiuj wartości</h3>
+                        <button class="copy-button" id="copyValues">
+                            <svg class="copy-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                                <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 4v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7.242a2 2 0 0 0-.602-1.43L16.083 2.57A2 2 0 0 0 14.685 2H10a2 2 0 0 0-2 2z M16 18v2a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2"/>
+                            </svg>
+                            <span>Kopiuj do schowka</span>
+                        </button>
+                        <div class="copy-success-message" id="copySuccess">Skopiowano!</div>
+                    </div>
+                </div>
+                <h1>Kalkulator CIT Estoński</h1>
+
+                <div class="input-section">
+                    <div class="input-group">
+                        <label>Przychód brutto</label>
+                        <input type="text" id="grossRevenue" value="" placeholder="0,00 zł">
+                        <span class="error-message" id="grossRevenue-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label>Dochód</label>
+                        <input type="text" id="income" value="" placeholder="0,00 zł">
+                        <span class="error-message" id="income-error"></span>
+                    </div>
+                    <div class="input-group">
+                        <label>Zysk do wypłacenia</label>
+                        <input type="text" id="profitToDistribute" value="" placeholder="0,00 zł">
+                        <span class="error-message" id="profitToDistribute-error"></span>
+                    </div>
+                </div>
+
+                <div class="button-container">
+                    <button id="calculateButton"><span>Pokaż wyniki</span></button>
+                </div>
+
+                <div id="resultsSection" class="hidden">
+                    <div class="section" id="calculationSection">
+                        <div class="results-group">
+                            <h2>CIT Estoński</h2>
+                            <div class="result-item">
+                                <label>Podatek do zapłaty</label>
+                                <input type="text" id="estonianCIT" readonly>
+                            </div>
+                        </div>
+
+                        <div class="results-group">
+                            <h2>JDG - Podatek liniowy</h2>
+                            <div class="result-item">
+                                <label>Podatek do zapłaty</label>
+                                <input type="text" id="linearTax" readonly>
+                            </div>
+                        </div>
+
+                        <div class="results-group">
+                            <h2>Sp. z o.o.</h2>
+                            <div class="result-item">
+                                <label>Podatek do zapłaty</label>
+                                <input type="text" id="llcTax" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
