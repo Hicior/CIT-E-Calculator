@@ -3,7 +3,7 @@
        DOM Element References
     ================================================== */
     const DOM = {
-        resultsSection: document.getElementById("resultsSection"),
+        resultsSection: document.getElementById("eCIT-resultsSection"),
         calculateButton: document.getElementById("calculateButton"),
         grossRevenueInput: document.getElementById("grossRevenue"),
         incomeInput: document.getElementById("income"),

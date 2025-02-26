@@ -10,54 +10,54 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="Tax-Calculator-Wrapper">
-        <section class="calculator">
-            <div class="calculator-container">
+    <div class="eCIT-Calculator-Wrapper">
+        <section class="eCIT-calculator">
+            <div class="eCIT-calculator-container">
                 <h1>Kalkulator CIT Estoński</h1>
 
-                <div class="input-section">
-                    <div class="input-group">
+                <div class="eCIT-input-section">
+                    <div class="eCIT-input-group">
                         <label>Przychód brutto</label>
                         <input type="text" id="grossRevenue" value="" placeholder="0,00 zł">
-                        <span class="error-message" id="grossRevenue-error"></span>
+                        <span class="eCIT-error-message" id="grossRevenue-error"></span>
                     </div>
-                    <div class="input-group">
+                    <div class="eCIT-input-group">
                         <label>Dochód</label>
                         <input type="text" id="income" value="" placeholder="0,00 zł">
-                        <span class="error-message" id="income-error"></span>
+                        <span class="eCIT-error-message" id="income-error"></span>
                     </div>
-                    <div class="input-group">
+                    <div class="eCIT-input-group">
                         <label>Zysk do wypłacenia</label>
                         <input type="text" id="profitToDistribute" value="" placeholder="0,00 zł">
-                        <span class="error-message" id="profitToDistribute-error"></span>
+                        <span class="eCIT-error-message" id="profitToDistribute-error"></span>
                     </div>
                 </div>
 
-                <div class="button-container">
+                <div class="eCIT-button-container">
                     <button id="calculateButton"><span>Pokaż wyniki</span></button>
                 </div>
 
-                <div id="resultsSection" class="hidden">
-                    <div class="section" id="calculationSection">
-                        <div class="results-group">
+                <div id="eCIT-resultsSection" class="hidden">
+                    <div class="eCIT-section" id="calculationSection">
+                        <div class="eCIT-results-group">
                             <h2>CIT Estoński</h2>
-                            <div class="result-item">
+                            <div class="eCIT-result-item">
                                 <label>Podatek do zapłaty</label>
                                 <input type="text" id="estonianCIT" readonly>
                             </div>
                         </div>
 
-                        <div class="results-group">
+                        <div class="eCIT-results-group">
                             <h2>JDG - Podatek liniowy</h2>
-                            <div class="result-item">
+                            <div class="eCIT-result-item">
                                 <label>Podatek do zapłaty</label>
                                 <input type="text" id="linearTax" readonly>
                             </div>
                         </div>
 
-                        <div class="results-group">
+                        <div class="eCIT-results-group">
                             <h2>Sp. z o.o.</h2>
-                            <div class="result-item">
+                            <div class="eCIT-result-item">
                                 <label>Podatek do zapłaty</label>
                                 <input type="text" id="llcTax" readonly>
                             </div>
