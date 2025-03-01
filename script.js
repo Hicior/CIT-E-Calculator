@@ -5,7 +5,8 @@
     const DOM = {
         resultsSection: document.getElementById("eCIT-resultsSection"),
         calculateButton: document.getElementById("calculateButton"),
-        grossRevenueInput: document.getElementById("grossRevenue"),
+        taxRate9Input: document.getElementById("taxRate9"),
+        taxRate19Input: document.getElementById("taxRate19"),
         incomeInput: document.getElementById("income"),
         profitToDistributeInput: document.getElementById("profitToDistribute"),
         estonianCITOutput: document.getElementById("estonianCIT"),
@@ -16,7 +17,6 @@
     /* ==================================================
        Constants
     ================================================== */
-    const ESTONIAN_CIT_THRESHOLD = 8569000;
     const INCOME_THRESHOLD = 1000000;
     const HEALTH_INSURANCE_THRESHOLD = 77096.4;
 
@@ -36,10 +36,44 @@
         return parseFloat(value.replace(/[^\d,-]/g, "").replace(",", ".")) || 0;
     }
 
+    function getSelectedTaxRate() {
+        return DOM.taxRate9Input.checked ? 9 : 19;
+    }
+
+    // Function to preserve cursor position when reformatting input
+    function setInputValuePreservingCursor(input, newValue) {
+        // Store current cursor position
+        const currentPosition = input.selectionStart;
+        
+        // Get the current value without formatting
+        const currentValueRaw = parsePLN(input.value).toString();
+        
+        // Get the new value without formatting
+        const newValueRaw = parsePLN(newValue).toString();
+        
+        // Set the new value
+        input.value = newValue;
+        
+        // If we're editing (not just setting a value), try to preserve cursor position
+        if (document.activeElement === input && currentPosition !== null) {
+            // Calculate new cursor position based on length difference
+            const lengthDiff = newValue.length - input.value.length;
+            const newPosition = Math.max(0, Math.min(currentPosition + lengthDiff, newValue.length));
+            
+            // Set cursor position
+            input.setSelectionRange(currentPosition, currentPosition);
+        }
+    }
+
     /* ==================================================
        Validation Functions
     ================================================== */
     function validateInput(value, fieldName) {
+        // Skip validation for tax rate radio buttons
+        if (fieldName === "taxRate") {
+            return true;
+        }
+
         const input = document.getElementById(fieldName);
         const errorElement = document.getElementById(`${fieldName}-error`);
         let isValid = true;
@@ -79,17 +113,8 @@
         return isValid;
     }
 
-    function validateValues(grossRevenue, income, profitToDistribute) {
+    function validateValues(income, profitToDistribute) {
         let isValid = true;
-        
-        // Check if income is less than or equal to gross revenue
-        if (income > grossRevenue) {
-            const errorElement = document.getElementById("income-error");
-            DOM.incomeInput.classList.add("error");
-            errorElement.textContent = "Dochód nie może być większy niż przychód brutto";
-            errorElement.classList.add("visible");
-            isValid = false;
-        }
 
         // Check if profit to distribute is less than or equal to income
         if (profitToDistribute > income) {
@@ -98,6 +123,14 @@
             errorElement.textContent = "Zysk do wypłacenia nie może być większy niż dochód";
             errorElement.classList.add("visible");
             isValid = false;
+        } else {
+            // Clear error if values are now valid
+            const errorElement = document.getElementById("profitToDistribute-error");
+            if (errorElement) {
+                errorElement.textContent = "";
+                errorElement.classList.remove("visible");
+                DOM.profitToDistributeInput.classList.remove("error");
+            }
         }
 
         return isValid;
@@ -106,8 +139,8 @@
     /* ==================================================
        Tax Calculation Functions
     ================================================== */
-    function calculateEstonianCIT(grossRevenue, profitToDistribute) {
-        return grossRevenue <= ESTONIAN_CIT_THRESHOLD 
+    function calculateEstonianCIT(taxRate, profitToDistribute) {
+        return taxRate === 9 
             ? profitToDistribute * 0.20 
             : profitToDistribute * 0.25;
     }
@@ -129,8 +162,8 @@
         }
     }
 
-    function calculateLLCTax(grossRevenue, income, profitToDistribute) {
-        if (grossRevenue <= ESTONIAN_CIT_THRESHOLD) {
+    function calculateLLCTax(taxRate, income, profitToDistribute) {
+        if (taxRate === 9) {
             return (profitToDistribute * 0.2629) + ((income - profitToDistribute) * 0.09);
         } else {
             return (profitToDistribute * 0.3439) + ((income - profitToDistribute) * 0.19);
@@ -142,32 +175,30 @@
     ================================================== */
     function calculate() {
         // Format inputs on calculation
-        DOM.grossRevenueInput.value = formatPLN(parsePLN(DOM.grossRevenueInput.value));
         DOM.incomeInput.value = formatPLN(parsePLN(DOM.incomeInput.value));
         DOM.profitToDistributeInput.value = formatPLN(parsePLN(DOM.profitToDistributeInput.value));
         
-        const grossRevenue = parsePLN(DOM.grossRevenueInput.value);
+        const taxRate = getSelectedTaxRate();
         const income = parsePLN(DOM.incomeInput.value);
         const profitToDistribute = parsePLN(DOM.profitToDistributeInput.value);
 
         // Validate all inputs
-        const isGrossRevenueValid = validateInput(DOM.grossRevenueInput.value, "grossRevenue");
         const isIncomeValid = validateInput(DOM.incomeInput.value, "income");
         const isProfitValid = validateInput(DOM.profitToDistributeInput.value, "profitToDistribute");
 
-        if (!isGrossRevenueValid || !isIncomeValid || !isProfitValid) {
+        if (!isIncomeValid || !isProfitValid) {
             return;
         }
 
         // Validate relationships between values
-        if (!validateValues(grossRevenue, income, profitToDistribute)) {
+        if (!validateValues(income, profitToDistribute)) {
             return;
         }
 
         // Calculate taxes
-        const estonianCIT = calculateEstonianCIT(grossRevenue, profitToDistribute);
+        const estonianCIT = calculateEstonianCIT(taxRate, profitToDistribute);
         const linearTax = calculateLinearTax(income);
-        const llcTax = calculateLLCTax(grossRevenue, income, profitToDistribute);
+        const llcTax = calculateLLCTax(taxRate, income, profitToDistribute);
 
         // Display results
         DOM.estonianCITOutput.value = formatPLN(estonianCIT);
@@ -191,12 +222,6 @@
     DOM.calculateButton.addEventListener("click", calculate);
 
     // Format inputs on blur
-    DOM.grossRevenueInput.addEventListener("blur", function() {
-        if (this.value) {
-            this.value = formatPLN(parsePLN(this.value));
-        }
-    });
-
     DOM.incomeInput.addEventListener("blur", function() {
         if (this.value) {
             this.value = formatPLN(parsePLN(this.value));
@@ -210,24 +235,94 @@
     });
 
     // Auto-update calculations when inputs change
-    DOM.grossRevenueInput.addEventListener("input", function() {
-        validateInput(this.value, "grossRevenue");
+    DOM.taxRate9Input.addEventListener("change", function() {
         if (DOM.resultsSection.classList.contains("visible")) {
             calculate();
         }
     });
 
-    DOM.incomeInput.addEventListener("input", function() {
-        validateInput(this.value, "income");
+    DOM.taxRate19Input.addEventListener("change", function() {
         if (DOM.resultsSection.classList.contains("visible")) {
             calculate();
+        }
+    });
+
+    // Modified input handlers to prevent cursor jumping
+    let isCalculating = false;
+
+    DOM.incomeInput.addEventListener("input", function() {
+        validateInput(this.value, "income");
+        
+        if (DOM.resultsSection.classList.contains("visible") && !isCalculating) {
+            // Set flag to prevent recursive calls
+            isCalculating = true;
+            
+            // Store current cursor position
+            const cursorPos = this.selectionStart;
+            
+            // Calculate without reformatting this input
+            const income = parsePLN(this.value);
+            const profitToDistribute = parsePLN(DOM.profitToDistributeInput.value);
+            const taxRate = getSelectedTaxRate();
+            
+            // Clear any previous profit distribution error when income increases
+            const profitErrorElement = document.getElementById("profitToDistribute-error");
+            if (profitErrorElement && profitToDistribute <= income) {
+                profitErrorElement.textContent = "";
+                profitErrorElement.classList.remove("visible");
+                DOM.profitToDistributeInput.classList.remove("error");
+            }
+            
+            // Only update results if valid
+            if (validateInput(this.value, "income") && validateValues(income, profitToDistribute)) {
+                const estonianCIT = calculateEstonianCIT(taxRate, profitToDistribute);
+                const linearTax = calculateLinearTax(income);
+                const llcTax = calculateLLCTax(taxRate, income, profitToDistribute);
+                
+                DOM.estonianCITOutput.value = formatPLN(estonianCIT);
+                DOM.linearTaxOutput.value = formatPLN(linearTax);
+                DOM.llcTaxOutput.value = formatPLN(llcTax);
+            }
+            
+            // Restore cursor position
+            this.setSelectionRange(cursorPos, cursorPos);
+            
+            // Reset flag
+            isCalculating = false;
         }
     });
 
     DOM.profitToDistributeInput.addEventListener("input", function() {
         validateInput(this.value, "profitToDistribute");
-        if (DOM.resultsSection.classList.contains("visible")) {
-            calculate();
+        
+        if (DOM.resultsSection.classList.contains("visible") && !isCalculating) {
+            // Set flag to prevent recursive calls
+            isCalculating = true;
+            
+            // Store current cursor position
+            const cursorPos = this.selectionStart;
+            
+            // Calculate without reformatting this input
+            const income = parsePLN(DOM.incomeInput.value);
+            const profitToDistribute = parsePLN(this.value);
+            const taxRate = getSelectedTaxRate();
+            
+            // Only update results if valid
+            if (validateInput(this.value, "profitToDistribute") && validateValues(income, profitToDistribute)) {
+                const estonianCIT = calculateEstonianCIT(taxRate, profitToDistribute);
+                const linearTax = calculateLinearTax(income);
+                const llcTax = calculateLLCTax(taxRate, income, profitToDistribute);
+                
+                DOM.estonianCITOutput.value = formatPLN(estonianCIT);
+                DOM.linearTaxOutput.value = formatPLN(linearTax);
+                DOM.llcTaxOutput.value = formatPLN(llcTax);
+            }
+            
+            // Restore cursor position
+            this.setSelectionRange(cursorPos, cursorPos);
+            
+            // Reset flag
+            isCalculating = false;
         }
     });
 })();

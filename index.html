@@ -17,9 +17,18 @@
 
                 <div class="eCIT-input-section">
                     <div class="eCIT-input-group">
-                        <label>Przychód brutto</label>
-                        <input type="text" id="grossRevenue" value="" placeholder="0,00 zł">
-                        <span class="eCIT-error-message" id="grossRevenue-error"></span>
+                        <label>Stawka podatku CIT</label>
+                        <div class="eCIT-radio-group" id="taxRate">
+                            <div class="eCIT-radio-option">
+                                <input type="radio" id="taxRate9" name="taxRate" value="9" checked>
+                                <label for="taxRate9">9%</label>
+                            </div>
+                            <div class="eCIT-radio-option">
+                                <input type="radio" id="taxRate19" name="taxRate" value="19">
+                                <label for="taxRate19">19%</label>
+                            </div>
+                        </div>
+                        <span class="eCIT-error-message" id="taxRate-error"></span>
                     </div>
                     <div class="eCIT-input-group">
                         <label>Dochód</label>
