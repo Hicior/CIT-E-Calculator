@@ -38,11 +38,16 @@
   padding: 0;
 }
 
+body {
+  min-height: 100vh;
+}
+
 .eCIT-Calculator-Wrapper {
   background: var(--background-color);
   font-family: var(--font-family);
   color: var(--primary-color);
   line-height: 1.5;
+  margin-top: 100px;
 }
 
 /* ==========================================================================
